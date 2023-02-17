@@ -2,7 +2,20 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     padding: 10px;
     margin: 2px;
-    border: 1px solid black;
+}
+
+header{
+    display: flex;
+}
+
+header .viewHighscore{
+    text-decoration: underline;
+    width: 50%;
+}
+
+header #timer{
+    width: 50%;
+    text-align: right;
 }
 
 main{
@@ -12,25 +25,49 @@ main{
     margin: 20px;
     margin-left: 25%;
     margin-right: 25%;
+    border: 1px solid black;
 }
 
-section{
+#interactiveSection{
     display: flex;
     flex-direction: column;
     margin: 10px;
 }
 
+#status{
+    display:flex;
+    margin: 10px;
+}
+
+/* Style for all buttons*/
 button {
-    background-color: blueviolet;
+    background-color: rgb(116, 37, 189);
     color: azure;
     font-weight: bold;
     font-size: 20px;
+    border-radius: 20px;
 }
 
-li{
+ul li{
     text-align: left;
-    background-color: blueviolet;
+    background-color: rgb(116, 37, 189);
     color: azure;
     font-weight: bold;
     font-size: 18px;
+    list-style-type: none;
+    border-radius: 20px;
+}
+
+ol li{
+    text-align: left;
+    color: black;
+    list-style: none;
+}
+
+button:hover{
+    background-color: rgba(137, 43, 226, 0.7);
+}
+
+ul li:hover{
+    background-color: rgba(137, 43, 226, 0.7);
 }

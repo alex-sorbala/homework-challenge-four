@@ -1,36 +1,37 @@
 //Question objects
 var question1 = {
-    question: "This is question 1 ?",
+    question: "Suppose we have a text 'human' that we want to convert into string without using the 'new' operator. Which is the correct way from the following to do so:",
     options: [
-        "abc1",
-        "abc2",
-        "abc3",
-        "abc4"
+        "toString()",
+        "String(human)",
+        "String newvariable='human'",
+        "Both human.toString() and String(human)"
     ],
-    answer: "abc2"
+    answer: "Both human.toString() and String(human)"
 }
 
 var question2 = {
-    question: "This is question 2 ?",
+    question: "What we will get if we compare the 'one' with '8' using the less than operator ('one'<8)?",
     options: [
-        "abc123",
-        "abc123",
-        "abc123",
-        "abc123"
+        "False",
+        "True",
+        "NaN",
+        "Undefined"
     ],
-    answer: "abc123"
+    answer: "False"
 }
 
 var question3 = {
-    question: "This is question 3 ?",
+    question: " A set of unordered properties that, has a name and value is called______",
     options: [
-        "abc123",
-        "abc123",
-        "abc123",
-        "abc123"
+        "String",
+        "Array",
+        "Serialized Object",
+        "Object"
     ],
-    answer: "abc123"
+    answer: "Object"
 }
+
 
 //Global Variables
 var questions = [question1, question2, question3];
@@ -45,12 +46,12 @@ var timerEl = document.getElementById("timer");
 
 
 function start(){
-    document.getElementById("start").remove();
+    removeElements(interactiveSectionEL);
     displayQuestion(0);
     startTimer();
 }
 
-//Creting and appending the elements based on the question object
+//Creating and appending the elements based on the question object
 function displayQuestion(questionNumber){
     //verifying that we haven't reached the end of questions list
     if (questionNumber < questions.length) {
@@ -66,7 +67,6 @@ function displayQuestion(questionNumber){
             option.textContent = (index+1) + ".  " + questions[questionNumber].options[index];
             //adding onclick function to every line and passin info about the object in it
             option.setAttribute("onclick","verifyResult(" + questionNumber + ", " + index + ")");
-            option.setAttribute("data-option", questions[questionNumber].options[index]);
             list.appendChild(option);
         }
     } else {
@@ -78,14 +78,14 @@ function displayQuestion(questionNumber){
 
 //Verifying result after an option has been selected and triggeting displayAnswer and displayQuestion
 function verifyResult(questionNumber, optionNumber){
-    document.querySelector("ul").remove();
+    removeElements(interactiveSectionEL);
     if(questions[questionNumber].options[optionNumber] === questions[questionNumber].answer){
         displayAnswer(true);
         displayQuestion(questionNumber+1);
     }else{
+        timeLeft = timeLeft - 5;
         displayAnswer(false);
         displayQuestion(questionNumber+1);
-        timeLeft = timeLeft - 5;
     }
 }
 
@@ -104,12 +104,12 @@ function displayAnswer(result){
     statusEL.appendChild(newElement);
     setTimeout(function(){
         newElement.remove();
-    }, 3000);
+    }, 2000);
 }
 
 //Timer
 function startTimer(){
-    timeLeft = 20;
+    timeLeft = 45;
     timeInterval = setInterval(function () {
 
         if(timeLeft === 0){
@@ -124,6 +124,8 @@ function startTimer(){
 
 //display score and the save score elements
 function displayScoreSaver(){
+    removeElements(interactiveSectionEL);
+
     questionDisplayEL.textContent = "All done!"
     
     //displaying the score in a new paragraph element
@@ -134,10 +136,12 @@ function displayScoreSaver(){
     //adding the save highscore field
     initials = document.createElement("input");
     initials.setAttribute("id","initials");
+
     //adding label
     var label = document.createElement("label");
     label.setAttribute("for","initials");
     label.textContent = "Enter initial: "
+
     // adding Save button
     var save = document.createElement("button");
     save.setAttribute("onclick","saveHighscore()");
@@ -156,15 +160,92 @@ function saveHighscore(){
         window.alert("Eneter an initial or nickname");
     }else{
         var record = initial + " - " + timeLeft;
+
         //getting record from local storage
         listOfScores = JSON.parse(localStorage.getItem("highscores"));
+
         //initiating array if it is null
         if(listOfScores == null){
             listOfScores=[];
         }
-        //pushing new record and saving to local storage
+        //pushing new record to array and saving to local storage
         listOfScores.push(record);
         console.log(listOfScores);
         localStorage.setItem("highscores", JSON.stringify(listOfScores));
+        
+        //displaying the highscore view
+        displayHighscore();
+    }
+}
+
+//displaying the highscore view 
+function displayHighscore(){
+    questionDisplayEL.textContent = "Highscore:";
+    
+    //Remove existing elements
+    removeElements(interactiveSectionEL);
+
+    //getting record from local storage
+    listOfScores = JSON.parse(localStorage.getItem("highscores"));
+
+    //initiating array if it is null
+    if(listOfScores == null){
+        listOfScores=[];
+    }
+
+    //create and append the scores
+    var list = document.createElement("ol");
+    interactiveSectionEL.appendChild(list);
+
+    for (let index = 0; index < listOfScores.length; index++) {
+        var line = document.createElement("li");
+        line.textContent = (1+index) +": " + listOfScores[index];
+        //alternating background colors
+        if(index % 2 == 0){
+            line.style = "background-color: rgba(128, 128, 128, 0.75);";
+        }else{
+            line.style = "background-color: rgba(128, 128, 128, 0.25);";
+        }
+
+        list.appendChild(line);
+    }
+
+    //removing any previus elements
+    removeElements(statusEL);
+
+    //adding Go back and clear buttons
+    var goBackBtn = document.createElement("button");
+    var clearScoreBtn = document.createElement("button");
+
+    goBackBtn.textContent = "Go Back";
+    clearScoreBtn.textContent = "Clear Score";
+
+    goBackBtn.setAttribute("onclick","goBack()");
+    clearScoreBtn.setAttribute("onclick","clearScore()");
+
+    goBackBtn.style = "width: 50%";
+    clearScoreBtn.style = "width: 50%";
+
+    statusEL.append(goBackBtn);
+    statusEL.append(clearScoreBtn);
+}
+
+//clearing score
+function clearScore(){
+    localStorage.removeItem("highscores");
+
+    //Remove existing list
+    removeElements(interactiveSectionEL);
+}
+
+//go back to start by simply reloading the page
+function goBack(){
+    location.reload();
+}
+
+//remove existing child elements
+function removeElements(parent){
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
     }
 }
