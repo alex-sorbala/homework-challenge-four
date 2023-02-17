@@ -1,0 +1,36 @@
+*{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 10px;
+    margin: 2px;
+    border: 1px solid black;
+}
+
+main{
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 20px;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+button {
+    background-color: blueviolet;
+    color: azure;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+li{
+    text-align: left;
+    background-color: blueviolet;
+    color: azure;
+    font-weight: bold;
+    font-size: 18px;
+}
